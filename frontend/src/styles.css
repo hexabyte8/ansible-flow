@@ -1,0 +1,18 @@
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px system-ui, sans-serif; }
+.app { display: grid; grid-template-columns: 240px 1fr 380px; grid-template-rows: 44px 1fr; height: 100vh; }
+.top { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; padding: 0 12px; background: #1e1e2e; color: #fff; }
+.top b { margin-right: auto; }
+button { cursor: pointer; padding: 4px 10px; }
+.side { padding: 8px; overflow: auto; border-right: 1px solid #ddd; }
+.side h4 { margin: 12px 0 4px; color: #666; }
+.item { padding: 6px 8px; margin: 4px 0; border: 1px solid #ccc; border-radius: 4px; cursor: grab; background: #fafafa; display: flex; justify-content: space-between; }
+.item span.edit { color: #06c; cursor: pointer; }
+.right { display: flex; flex-direction: column; border-left: 1px solid #ddd; min-height: 0; }
+.right .tabs { display: flex; }
+.right .tabs button { flex: 1; border: 0; padding: 8px; background: #eee; }
+.right .tabs button.on { background: #fff; font-weight: bold; }
+.right .body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.errors { background: #fee; color: #900; padding: 6px; max-height: 100px; overflow: auto; font: 12px monospace; white-space: pre-wrap; }
+.ok { background: #efe; color: #060; padding: 6px; }
+.form { padding: 8px; display: flex; flex-direction: column; gap: 6px; }

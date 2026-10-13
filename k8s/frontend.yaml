@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: frontend}
+  template:
+    metadata:
+      labels: {app: frontend}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: frontend
+          image: ghcr.io/hexabyte8/ansible-flow-frontend
+          env:
+            - name: BACKEND_URL
+              value: http://backend:8000
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: {path: /, port: 8080}
+          resources:
+            requests: {cpu: 25m, memory: 32Mi}
+            limits: {memory: 128Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector: {app: frontend}
+  ports:
+    - port: 80
+      targetPort: 8080

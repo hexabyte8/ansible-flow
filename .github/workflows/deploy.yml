@@ -1,0 +1,30 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Image tag to deploy (e.g. latest, 0.1.0, sha-abc1234)
+        default: latest
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure kubeconfig
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+      - name: Apply
+        working-directory: k8s
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          kustomize edit set image \
+            ghcr.io/hexabyte8/ansible-flow-backend=ghcr.io/$OWNER/ansible-flow-backend:${{ inputs.tag }} \
+            ghcr.io/hexabyte8/ansible-flow-frontend=ghcr.io/$OWNER/ansible-flow-frontend:${{ inputs.tag }}
+          kubectl apply -k .
+          kubectl -n ansible-flow rollout status deploy/backend --timeout=180s
+          kubectl -n ansible-flow rollout status deploy/frontend --timeout=180s

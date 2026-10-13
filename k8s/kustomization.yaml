@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ansible-flow
+resources:
+  - namespace.yaml
+  - backend.yaml
+  - frontend.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/hexabyte8/ansible-flow-backend
+    newTag: latest
+  - name: ghcr.io/hexabyte8/ansible-flow-frontend
+    newTag: latest
