@@ -85,6 +85,6 @@ def validate(req: ValidateRequest):
     with tempfile.TemporaryDirectory() as d:
         f = Path(d) / "playbook.yml"
         f.write_text(req.yaml)
-        r = subprocess.run([lint, "-p", str(f)], capture_output=True, text=True, timeout=60)
+        r = subprocess.run([lint, "-p", str(f)], check=False, capture_output=True, text=True, timeout=60)
     msgs = [l for l in r.stdout.splitlines() if l.strip()]
     return {"ok": r.returncode == 0, "errors": msgs, "linted": True}
